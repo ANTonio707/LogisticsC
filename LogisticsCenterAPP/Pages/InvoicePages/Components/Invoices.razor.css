@@ -1,0 +1,200 @@
+﻿.FilterTable {
+    background-color: #1E1450;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0;
+}
+ .FiltersComp {
+    display: flex;
+    flex-wrap: wrap;
+}
+.tableCustom {
+width:100%
+   
+}
+.tableHead {
+}
+
+.tableBody {
+    width:auto;
+
+}
+.group-form {
+    margin: 5px;
+}
+.form-control {
+    width: 150px;
+}
+
+.form-label {
+    color: white;
+    font-size:13px;
+    font-palette:dark
+}
+
+.btnFilters {
+    margin: 5px;
+}
+
+
+/*body::-webkit-scrollbar {
+    width: 12px;*/ /* width of the entire scrollbar */
+/*}
+
+body::-webkit-scrollbar-track {
+    background: orange;*/ /* color of the tracking area */
+/*}
+
+body::-webkit-scrollbar-thumb {
+    background-color: blue;*/ /* color of the scroll thumb */
+    /*border-radius: 20px;*/ /* roundness of the scroll thumb */
+    /*border: 3px solid orange;*/ /* creates padding around scroll thumb */
+/*}*/
+
+/*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}*/
+
+/* ::-webkit-scrollbar-button {  */
+/*        background-color: navy;  */
+/*  }  */
+
+/*::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 200px;*/
+
+.container-fluid{
+    width:100%;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center
+
+}
+.table {
+    overflow-x: auto;
+}
+@media screen and (max-width: 600px) {
+    .container-fluid {
+        background-color: red;
+        overflow-x: scroll;
+
+     }
+}
+
+/**----------------Cheakbox Style-------------------*/
+
+label.toggle {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 34px;
+}
+
+input[type="checkbox"] {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.ball {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 25px;
+}
+
+    .ball::before {
+        position: absolute;
+        content: '';
+        height: 26px;
+        width: 26px;
+        left: 5px;
+        bottom: 4px;
+        background-color: #fff;
+        transition: .3s;
+        border-radius: 25px;
+    }
+
+input:checked + .ball {
+    background-color: #58d68d;
+}
+
+    input:checked + .ball:before {
+        transform: translateX(44px);
+    }
+
+
+/*-----------------------------------------------*/
+/*-----------------SPINNER-----------------------*/
+/*-----------------------------------------------*/
+
+
+.container {
+    display:flex;
+    align-content: center;
+}
+
+.spinner {
+    width: 250px;
+    height: 250px;
+    animation: spinner-y0fdc1 2s infinite ease;
+    transform-style: preserve-3d;
+    margin: 20% auto;
+}
+
+    .spinner > div {
+        background-color: rgba(0,77,255,0.2);
+        height: 100%;
+        position: absolute;
+        width: 100%;
+        border: 2px solid #004dff;
+    }
+
+    .spinner div:nth-of-type(1) {
+        transform: translateZ(-22px) rotateY(180deg);
+    }
+
+    .spinner div:nth-of-type(2) {
+        transform: rotateY(-270deg) translateX(50%);
+        transform-origin: top right;
+    }
+
+    .spinner div:nth-of-type(3) {
+        transform: rotateY(270deg) translateX(-50%);
+        transform-origin: center left;
+    }
+
+    .spinner div:nth-of-type(4) {
+        transform: rotateX(90deg) translateY(-50%);
+        transform-origin: top center;
+    }
+
+    .spinner div:nth-of-type(5) {
+        transform: rotateX(-90deg) translateY(50%);
+        transform-origin: bottom center;
+    }
+
+    .spinner div:nth-of-type(6) {
+        transform: translateZ(22px);
+    }
+
+@keyframes spinner-y0fdc1 {
+    0% {
+        transform: rotate(45deg) rotateX(-25deg) rotateY(25deg);
+    }
+
+    50% {
+        transform: rotate(45deg) rotateX(-385deg) rotateY(25deg);
+    }
+
+    100% {
+        transform: rotate(45deg) rotateX(-385deg) rotateY(385deg);
+    }
+}

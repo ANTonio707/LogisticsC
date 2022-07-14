@@ -1,0 +1,56 @@
+﻿@page "/SubmitInvoice"
+@inject HttpClient Http
+@using System.IO
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models
+@inject NavigationManager NavigationManager
+@inject IToastService toastService
+@inject Microsoft.Extensions.Configuration.IConfiguration config
+@inject IWebServices WebServices
+@inject IBlazorStrap blazorstrapp
+@inject AuthenticationStateProvider _AuthSataProvider
+
+
+
+<div>
+    <AuthorizeView>
+        <Authorized>
+            <InvoiceForm TextBtn="Save" InvoiceModel="@invoiceDTO" OnValidSubmit="@Submit" OnInputFileChange="OnInputFileChange" DisableParameter="IsDisabled" activeSppiner="activeSpplier"/>
+        </Authorized>
+        <NotAuthorized>
+        <h1>No esta autorizado</h1>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+
+@*<h3>@Message</h3>
+<h3>@IsDisabled.ToString()</h3>*@
+
+@code {
+
+    string Message = "No file(s) selected";
+    IReadOnlyList<IBrowserFile> selectedFiles;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await test();
+    }
+    public async Task test()
+    {
+
+        var authState = await authenticationState;
+        var usuario = authState.User;
+        if (usuario.Identity.IsAuthenticated)
+        {
+            Console.WriteLine(usuario.Identity.Name);
+            Console.WriteLine(usuario.Identity.Name);
+        }
+        else
+        {
+              Console.WriteLine("Not Authorize");
+        }
+    }
+}

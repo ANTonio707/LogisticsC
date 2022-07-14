@@ -1,0 +1,70 @@
+﻿@page "/Internal_Invoice/{Id:int}"
+@using LogisticsCenterAPP.Services
+@using Microsoft.AspNetCore.Authorization
+@inject IWebServices WebServices
+@attribute [Authorize]
+    
+<EditForm Model="accountDTO" OnSubmit="Submit">
+        <div class="row col-md-6" style="margin: 0 auto">
+         <div class=" col-md-12" style="text-align:center">
+            <h1 style="margin: 0 auto">Invoice</h1>
+        </div>
+        <div class="col-md-6 form-group">
+            <label>No. Invoice</label>
+            <div>
+                <input @bind-value="invoice.No_Invoice" class="form-control" disabled/>
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            <label>Supplier</label>
+            <div>
+                <input @bind-value="invoice.Supplier" class="form-control" disabled/>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>No. RFP</label>
+            <div>
+                <input @bind-value="accountDTO.No_FRP" type="text" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-md-5 form-group">
+            <label>No. Internal  Invoice</label>
+            <div>
+                <input @bind-value="accountDTO.No_Internal_Invoice" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-3 form-group">
+            <label>customer payment</label>
+            <div>
+                <input @bind-value="accountDTO.CustomerPayment" class="form-control" type="text" />
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            <label>Customer</label>
+            <div>
+                <input @bind-value="accountDTO.CustomerName" type="text" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            <label>Entrance Fee</label>
+            <div>
+                <input @bind-value="accountDTO.EntranceFee" type="text" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>Supplier payment</label>
+            <div>
+                <input @bind-value="accountDTO.SupplierPayment" type="text" class="form-control"/>
+            </div>
+        </div> 
+        <div class="col-md-3">
+            <label>Cost Rate</label>
+            <div>
+                <input @bind-value="accountDTO.CostRate" class="form-control" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-success">Submit</button>
+        </div>
+    </div>
+</EditForm>

@@ -1,0 +1,198 @@
+﻿@page "/Invoices"
+@using BlazorInputFile
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models
+@using Microsoft.AspNetCore.Authorization
+@using  Microsoft.Extensions.Configuration
+@using System.IO
+@inject Microsoft.Extensions.Configuration.IConfiguration config
+@inject IWebServices WebServices
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+@attribute [Authorize]
+ 
+<div class=" FilterTable">
+    <div class="FiltersComp">
+        <div class="group-form">
+            <label class="form-label">From</label>
+            <div>
+                <input class="form-control" type="date" name="start" @bind-value="globalSearchDTO.DateFrom"/>
+            </div>
+        </div>
+        <div class="group-form">
+            <label class="form-label">To</label>
+            <div>
+                <input class="form-control" type="date" name="End" @bind-value="globalSearchDTO.DateTo"/>
+            </div>
+        </div>
+        <div class="group-form">
+            <label class="form-label">No invoice</label>
+            <div>
+               <input class="form-control" type="text" name="Invoice" placeholder="No Invoice..."  @bind-value="globalSearchDTO.No_Invoice" style="text-transform:uppercase"/>
+            </div>
+        </div>
+        <div class="group-form">
+            <label class="form-label">supplier</label>
+            <div>
+               <input class="form-control" type="text" name="PaymentDescription" placeholder="Supplier..."  @bind-value="globalSearchDTO.Supplier" style="text-transform:uppercase"/>
+            </div>
+        </div>
+        <div class="group-form">
+            <label class="form-label">Payment Description</label>
+            <div>
+                <input class="form-control" type="Text" name="PaymentDescription" placeholder="Payment Description..." @bind-value="globalSearchDTO.PaymentDescription" style="text-transform:uppercase"/>
+            </div>
+        </div>
+        <div class="group-form">
+            <label class="form-label">Reference</label>
+            <div>
+                <input class="form-control" type="Text" name="Reference" placeholder="Reference..." @bind-value="globalSearchDTO.Reference" style="text-transform:uppercase"/>
+             </div>
+        </div>
+    </div>
+    <div class="btnFilters">
+        <input class="btn btn-success" type="submit" name="Search" value="Search" @onclick="Search"/>
+        <input class="btn btn-danger" type="submit" name="Clear" value="Clear" @onclick="Clear"/>
+
+    </div>
+</div>
+
+@if (ListInvoices == null)
+{
+    <label>No Found....</label>
+}
+else if(ListInvoices.Capacity == 0)
+{
+  <div class="container">
+       <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+  </div>
+}
+else if (ListInvoices != null)
+{  
+ <div class="container-fluid">
+        <table class="table table-hover tableCustom" style=" width:100%">
+        <thead class="tableHead" >
+            <tr style="background-color: #1E1450; color: white"> 
+                <td>No Invoice</td>
+                <td>Supplier</td>
+                <td>InvoiceSupplierDate</td>
+                <td>PaymentDescription</td>
+                <td>Reference</td>
+                <td>Status</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody class="TableBody">
+            @foreach (var inv in ListInvoices)
+            {
+            <tr id="ident-@inv.InvoiceId" class="@ActiveClass" style="">
+                <td>@inv.No_Invoice</td>
+                <td>@inv.Supplier</td>
+                <td>@inv.InvoiceSupplierDate.Value.ToShortDateString()</td>
+                <td>@inv.PaymentDescription</td>
+                <td>@inv.Reference</td>
+                <td>    
+                    <a class="btn btn-primary" href="EditInvoice/@inv.InvoiceId">Update</a>
+                </td>
+               @*<td>
+                    <button type="button" @onclick="(()=>DetailsInvoice(inv.InvoiceId))" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Details</button>
+                </td>*@
+             
+               <td>
+                   <BSButton OnClick="(()=>DetailsInvoice(inv.InvoiceId))" Color="BSColor.Primary" Target="modal1">Operations</BSButton>
+               </td>
+             </tr>
+            }
+        </tbody>
+    </table>
+ </div>
+}
+
+ 
+<BSModal DataId="modal1">
+    <Header>Modal Title</Header>
+    <Content>
+          <p>@invoice.No_Invoice</p>
+          <p>@invoice.Supplier</p>
+          <p>@invoice.Reference</p>
+          <p>@invoice.PaymentDescription</p>
+           <img src="@FileBase64Src" width="430" height="700"/>
+    </Content>
+    <Footer Context="modal">
+        <div>   
+                <label class="toggle">
+                    <input @onclick="(()=>{UpdateStatus();modal.HideAsync();})" @bind="@invoice.status" type="checkbox">
+                    <span class="ball"></span>
+                </label>
+                @invoice.status
+            </div>
+        
+        <a href="@FileBase64Src" download="@invoice.FileName" target="_BLANK" class="btn btn-dark sesion2__about-content" id="sesion2__a"><i class='bx bxs-download' ></i> Download My CV Here</a>
+        <a class="btn btn-success" href="Internal_Invoice/@invoice.InvoiceId">Complete process</a>
+         <AuthorizeView>
+            <Authorized>
+                 <BSButton OnClick="(()=>{Delete(invoice.InvoiceId);modal.HideAsync();})" MarginStart="Margins.Auto" Color="BSColor.Danger">Discart</BSButton>
+          </Authorized>
+        </AuthorizeView>
+        <BSButton MarginStart="Margins.Auto" Color="BSColor.Secondary" @onclick="modal.HideAsync">Close</BSButton>
+    </Footer>
+</BSModal>
+
+
+@code {
+    string idAndClass = null;
+    string ActiveClass = null;
+    public InvoiceDTO i { get; set; } = new();
+    string FileBase64Src = "";
+    byte[] _fileBytes = null;
+    IFileListEntry file = null;
+
+    public async Task UpdateStatus() 
+    {
+        InvoiceDTO Inv = new InvoiceDTO();
+        Inv.status = false;
+
+
+        Inv.InvoiceId = invoice.InvoiceId;
+        Inv.No_Invoice = invoice.No_Invoice;
+        Inv.Supplier = invoice.Supplier;
+        Inv.PaymentDescription = invoice.PaymentDescription;
+        Inv.Reference = invoice.Reference.Trim().ToUpper();
+        Inv.InvoiceSupplierDate = Convert.ToDateTime(invoice.InvoiceSupplierDate);
+        Inv.ReceptionDate = Convert.ToDateTime(invoice.ReceptionDate);
+        Inv.InvoiceFileRute = invoice.InvoiceFileRute;
+        Inv.status = changeCheack(invoice.status);
+
+        var obj  = await WebServices.UpdateStatus(Inv);
+        await OnInitializedAsync();
+        StateHasChanged();
+
+    }
+   
+    public bool changeCheack(bool status) 
+     {
+            if (status == false)
+            {
+                return true;
+            }
+            return false;
+     }
+     
+}
+ 
+<style>
+        @idAndClass{
+            background: red;
+            transform: translateX(2500px);
+            transition: 2s;
+        }
+</style>

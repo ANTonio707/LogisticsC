@@ -1,0 +1,17 @@
+﻿@page "/EditInvoice/{Id:int}"
+@using System.IO
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager NavigationManager
+@inject IToastService toastService
+@inject Microsoft.Extensions.Configuration.IConfiguration config
+@inject IWebServices WebServices
+@attribute [Authorize]
+
+<InvoiceForm TextBtn="Update" InvoiceModel="@invoiceDTO" OnValidSubmit="@Submit" DisableParameter="IsDisabled"  OnInputFileChange="OnInputFileChange" IsDisabled="activeFields"/>
+
+ 
+@code{
+
+}

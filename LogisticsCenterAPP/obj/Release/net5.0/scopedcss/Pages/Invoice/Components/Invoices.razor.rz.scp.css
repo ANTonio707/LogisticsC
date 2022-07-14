@@ -1,0 +1,39 @@
+.FilterTable[b-6boiiq0xia] {
+    background-color: #1E1450;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0;
+}
+
+.FiltersComp[b-6boiiq0xia] {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.group-form[b-6boiiq0xia] {
+    margin: 5px;
+}
+
+
+.form-label[b-6boiiq0xia] {
+    color: white;
+}
+
+.btnFilters[b-6boiiq0xia] {
+    margin: 5px;
+}
+
+
+body[b-6boiiq0xia]::-webkit-scrollbar {
+    width: 12px; /* width of the entire scrollbar */
+}
+
+body[b-6boiiq0xia]::-webkit-scrollbar-track {
+    background: orange; /* color of the tracking area */
+}
+
+body[b-6boiiq0xia]::-webkit-scrollbar-thumb {
+    background-color: blue; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid orange; /* creates padding around scroll thumb */
+}

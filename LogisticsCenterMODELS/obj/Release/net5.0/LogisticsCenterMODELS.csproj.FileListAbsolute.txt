@@ -1,0 +1,12 @@
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\bin\Release\net5.0\LogisticsCenterMODELS.deps.json
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\bin\Release\net5.0\LogisticsCenterMODELS.dll
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\bin\Release\net5.0\ref\LogisticsCenterMODELS.dll
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\bin\Release\net5.0\LogisticsCenterMODELS.pdb
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.csproj.AssemblyReference.cache
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.AssemblyInfoInputs.cache
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.AssemblyInfo.cs
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.csproj.CoreCompileInputs.cache
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.dll
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\ref\LogisticsCenterMODELS.dll
+C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\obj\Release\net5.0\LogisticsCenterMODELS.pdb

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>LogisticsCenterMODELS</id>
+    <version>1.0.0</version>
+    <authors>LogisticsCenterMODELS</authors>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Microsoft.AspNetCore.Http" version="2.2.2" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\d5113\source\repos\LogisticsCenter\LogisticsCenterMODELS\bin\Release\net5.0\LogisticsCenterMODELS.dll" target="lib\net5.0\LogisticsCenterMODELS.dll" />
+  </files>
+</package>

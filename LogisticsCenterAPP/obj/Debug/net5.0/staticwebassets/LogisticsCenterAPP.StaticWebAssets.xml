@@ -1,0 +1,7 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\bin\Debug\net5.0\wwwroot\" />
+  <ContentRoot BasePath="/" Path="C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\obj\Debug\net5.0\scopedcss\bundle\" />
+  <ContentRoot BasePath="_content/Blazored.Toast" Path="C:\Users\D5113\.nuget\packages\blazored.toast\3.2.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/BlazorInputFile" Path="C:\Users\D5113\.nuget\packages\blazorinputfile\0.2.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/BlazorStrap" Path="C:\Users\D5113\.nuget\packages\blazorstrap\5.0.105.4262022\build\..\staticwebassets\" />
+</StaticWebAssets>

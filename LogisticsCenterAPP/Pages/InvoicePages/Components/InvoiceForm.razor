@@ -1,0 +1,71 @@
+﻿@using System.IO
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models
+@inject NavigationManager NavigationManager
+@inject IToastService toastService
+@inject Microsoft.Extensions.Configuration.IConfiguration config
+@inject IWebServices WebServices
+
+
+<EditForm Model="@InvoiceModel" OnSubmit="@OnValidSubmit">
+    <div class="row col-md-6" style="margin: 0 auto">
+        <div class=" col-md-12" style="text-align:center">
+            <h1 style="margin: 0 auto">Invoice</h1>
+        </div>
+        <br />
+        <div class="col-md-12 form-group">
+            <label class="form-label">Supplier</label>
+            <div class="">
+                <input class="form-control" type="text" name="Supplier" @bind="InvoiceModel.Supplier" @bind:event="oninput" placeholder="Supplier..."/>
+                <ValidationMessage For="(()=>InvoiceModel.Supplier)"/>
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            <label class="form-label">No Invoice</label>
+            <div>
+                <input class="form-control" type="text" name="NoInvoice"  @bind-value="InvoiceModel.No_Invoice" @onfocusout="OutFocus" placeholder="No Invoice..." />
+                    <ValidationMessage For="(()=>InvoiceModel.No_Invoice)"/>
+            </div>
+        </div>
+        <div class="col-md-6 form-group">
+            <label class="form-label">Invoice Date</label>
+            <div>
+                <input class="form-control" type="date" name="InvoiceSupplierDate"  @bind-value="InvoiceModel.InvoiceSupplierDate"  placeholder="Invoice Date..." disabled="@IsDisabled"/>
+                    <ValidationMessage For="(()=>InvoiceModel.InvoiceSupplierDate)"/>
+            </div>
+        </div>
+        <div class="col-md-12 form-group">
+            <label class="form-label">Payment Description</label>
+            <div>
+                <input class="form-control" type="text" name="PaymentDescription"  @bind-value="InvoiceModel.PaymentDescription" placeholder="Payment Description..." disabled="@IsDisabled"/>
+                <ValidationMessage For="(()=>InvoiceModel.PaymentDescription)"/>
+            </div>
+        </div>
+        <div class="col-md-12 form-group">
+            <label class="form-label">Reference</label>
+            <div>
+                <input class="form-control" type="text" name="Reference"  @bind-value="InvoiceModel.Reference"  placeholder="Reference..." disabled="@IsDisabled"/>
+                  <ValidationMessage For="(()=>InvoiceModel.Reference)"/>
+            </div>
+        </div>
+        <div class="col-md-12 form-group">
+            <label>Invoice Picture</label>
+            <div>
+                <InputFile OnChange="OnInputFileChange" multiple disabled="@IsDisabled"/>
+            </div>
+        </div>
+         
+        <div class="col-md-12 form-group">
+            <input type="submit" value="@TextBtn"class="btn btn-success" disabled="@IsDisabled"/>
+            @if (activeSppiner == true)
+            {
+                <BSSpinner Size="Size.Small"/>
+            }    
+        </div>   
+      
+    </div>
+       <DataAnnotationsValidator/>
+</EditForm> 
+
+@code {
+}

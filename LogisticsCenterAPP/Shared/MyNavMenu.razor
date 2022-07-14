@@ -1,0 +1,72 @@
+﻿@using LogisticsCenterAPP.Auth
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models.DTOModels 
+@inject NavigationManager _navigation
+@inject HttpClient _http
+@inject ISessionStorageServices sessionStorageServices
+@inject ILoginServices loginServices
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/Index"><b>Logistics Center</b></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        @*<li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>*@
+      </ul>    
+    </div>
+     <div class="d-flex">
+           <AuthorizeView>
+            <Authorized>
+                   <h4 style="margin-right:20px"> <b style="color:white">Hello, @Username</b></h4>
+                   <button @onclick="LogOut">
+                        <span class="shadow"></span>
+                        <span class="edge"></span>
+                        <span class="front text"> <b>Log Out</b> </span>
+                   </button>
+            </Authorized>
+        </AuthorizeView>
+    </div>
+  </div>
+</nav>
+@code
+{
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authentication { get; set; }
+
+
+    string Username = "";
+    private async Task LogOut()
+    {
+        await loginServices.Logout();
+        _navigation.NavigateTo("/");
+    }
+    private void logIn()
+    {
+        _navigation.NavigateTo("/");
+    }
+    public async Task ShowUser() 
+    {
+        var data = await authentication;
+        if (data.User.Identity.IsAuthenticated)
+        {
+            Username = data.User.Identity.Name;
+        }
+    } 
+    protected override async Task OnInitializedAsync()
+    { 
+        await ShowUser();
+    }
+}
