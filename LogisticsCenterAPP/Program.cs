@@ -8,8 +8,10 @@ using LogisticsCenterAPP.Services;
 using LogisticsCenterMODELS.Models;
 using LogisticsCenterMODELS.Models.DTOModels;
 using LogisticsCenterMODELS.ViewModels;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -23,6 +25,12 @@ namespace LogisticsCenterAPP
 {
     public class Program
     {
+        private readonly IConfiguration configuration;
+
+        public Program(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         public static async Task Main(string[] args)
         {
            
@@ -30,16 +38,12 @@ namespace LogisticsCenterAPP
 
             builder.RootComponents.Add<App>("#app");
             builder.Services.AddOptions();
-            builder.Services.AddAuthorizationCore();
-            //var url = builder.Configuration.GetValue<string>("ApiConfig:Url");
-            //builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(url) });
-
             builder.Services.AddScoped(x =>
             {
                 var apiUrl = new Uri(builder.Configuration["apiUrl"]);
                 return new HttpClient() { BaseAddress = apiUrl };
             });
-
+            builder.Services.AddAuthorizationCore();
             //builder.Services.AddTransient(x =>
             //{
             //    var apiUrl = new Uri(builder.Configuration["apiUrl"]);
@@ -66,9 +70,15 @@ namespace LogisticsCenterAPP
             builder.Services.AddScoped<Utls>();
 
 
-
             await builder.Build().RunAsync();
         }
-         
+        ////public static IWebHost BuildWebHost(string[] args) =>
+        ////   WebHost.CreateDefaultBuilder(args)
+        ////       .UseConfiguration(new ConfigurationBuilder()
+        ////           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        ////           .AddCommandLine(args)
+        ////           .Build())
+        ////       .UseStartup<Startup>()
+        ////       .Build();
     }
 }

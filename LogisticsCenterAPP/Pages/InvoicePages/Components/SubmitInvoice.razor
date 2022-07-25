@@ -3,13 +3,14 @@
 @using System.IO
 @using LogisticsCenterAPP.Services
 @using LogisticsCenterMODELS.Models
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager NavigationManager
 @inject IToastService toastService
 @inject Microsoft.Extensions.Configuration.IConfiguration config
 @inject IWebServices WebServices
 @inject IBlazorStrap blazorstrapp
 @inject AuthenticationStateProvider _AuthSataProvider
-
+@attribute [Authorize]
 
 
 <div>
@@ -34,23 +35,5 @@
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        await test();
-    }
-    public async Task test()
-    {
-
-        var authState = await authenticationState;
-        var usuario = authState.User;
-        if (usuario.Identity.IsAuthenticated)
-        {
-            Console.WriteLine(usuario.Identity.Name);
-            Console.WriteLine(usuario.Identity.Name);
-        }
-        else
-        {
-              Console.WriteLine("Not Authorize");
-        }
-    }
+  
 }

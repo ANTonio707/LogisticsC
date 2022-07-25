@@ -12,6 +12,8 @@ namespace LogisticsCenterAPI.Data
         }
         public DbSet<Account> Account { get; set; }
         public DbSet<Invoice> Invoice { get; set; }
-        public DbSet<User> user { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<External_User> External_User { get; set; }
+        public DbSet<Supplier> Supplier { get; set; }
     }
 }

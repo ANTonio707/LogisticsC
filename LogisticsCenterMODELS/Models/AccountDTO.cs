@@ -9,7 +9,7 @@ namespace LogisticsCenterMODELS.Models
     public class AccountDTO
     {
         public int Id { get; set; }
-        public string Supplier { get; set; }
+        public int SupplierId { get; set; }
         public DateTime ReceptionDate { get; set; }
         public DateTime? InvoiceSupplierDate { get; set; }
         public string No_Invoice { get; set; }

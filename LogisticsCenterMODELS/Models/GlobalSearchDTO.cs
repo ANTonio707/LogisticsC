@@ -9,20 +9,29 @@ namespace LogisticsCenterMODELS.Models
     public class GlobalSearchDTO
     {
         // General
-        public DateTime? DateFrom { get; set; }
-        public DateTime? DateTo { get; set; }
+        public DateTime? ReceptionDateFrom { get; set; }
+        public DateTime? ReceptionDateTo { get; set; }
+        public DateTime? SupplierInvoiceDateFrom { get; set; }
+        public DateTime? SupplierInvoiceDateTo { get; set; }
         public string Month { get; set; }
         public int? Year { get; set; }
 
 
 
         public string Supplier { get; set; }
-        public DateTime InvoiceSupplierDate { get; set; }
         public string No_Invoice { get; set; }
         public string PaymentDescription { get; set; }
         public string Reference { get; set; }
         public string InvoiceFileRute { get; set; }
 
+        //Account
+        public string No_FRP { get; set; }
+        public string No_Internal_Invoice { get; set; }
+        public int CustomerPayment { get; set; }
+        public string CustomerName { get; set; }
+        public int EntranceFee { get; set; }
+        public int SupplierPayment { get; set; }
+        public int CostRate { get; set; }
 
         #region
         //// Delay Code Report
@@ -57,12 +66,12 @@ namespace LogisticsCenterMODELS.Models
         public GlobalSearchDTO()
         {
             this.PageNumber = 1;
-            this.PageSize = 50;
+            this.PageSize = 4;
         }
         public GlobalSearchDTO(int pageNumber, int pageSize)
         {
             this.PageNumber = pageNumber < 1 ? 1 : pageNumber;
-            this.PageSize = pageSize > 50 ? 50 : pageSize;
+            this.PageSize = pageSize > 10 ? 10 : pageSize;
         }
 
         public override bool Equals(object obj)

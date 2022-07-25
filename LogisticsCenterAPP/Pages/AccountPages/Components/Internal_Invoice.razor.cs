@@ -23,7 +23,7 @@ namespace LogisticsCenterAPP.Pages.AccountPages.Components
             try
             {
                 accountDTO.No_Invoice = invoice.No_Invoice;
-                accountDTO.Supplier = invoice.Supplier;
+                accountDTO.SupplierId = invoice.SupplierId;
                 accountDTO.InvoiceSupplierDate = invoice.InvoiceSupplierDate;
                 accountDTO.ReceptionDate = invoice.ReceptionDate;
                 accountDTO.Reference = invoice.Reference;
@@ -31,7 +31,7 @@ namespace LogisticsCenterAPP.Pages.AccountPages.Components
                 accountDTO.InvoiceFileRute = invoice.InvoiceFileRute;
 
 
-                WebResponseAccount = await WebServices.Create(accountDTO);
+                WebResponseAccount = await WebServices.CreateAccount(accountDTO);
             }
             catch (System.Exception)
             {

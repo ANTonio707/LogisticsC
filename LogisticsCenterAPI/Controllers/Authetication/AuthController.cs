@@ -33,7 +33,7 @@ namespace LogisticsCenterAPI.Controllers.Authetication
             _configuration = configuration; 
         }
 
-
+        #region
         //[HttpPost, Route("Login")]
         //public async Task<ActionResult<Response<UserLoginDTO>>> Login([FromBody] UserLoginDTO user)
         //{
@@ -68,8 +68,13 @@ namespace LogisticsCenterAPI.Controllers.Authetication
         //    };
         //    return await Task.FromResult(WebResponseLogin);
         //}
+        #endregion
 
 
+
+
+
+        //AUTHENTICATION ACTIVE DIRECTORY USERS
         [HttpPost, Route("Login")]
         public async Task<ActionResult<Response<UserToken>>> Login([FromBody] UserLoginDTO user)
         {
@@ -103,6 +108,83 @@ namespace LogisticsCenterAPI.Controllers.Authetication
         }
 
 
+        //AUTHENTICATION EXTERNAL USERS
+        [HttpPost, Route("LoginUserExternal")]
+        public async Task<ActionResult<External_UserDTO>> LoginUserExternal(External_User_LoginDTO external_User_LoginDTO)
+        {
+            var dataToken = new UserToken();
+
+            var webResponse = new Response<UserToken>();
+
+            var obj = await _repo.LoginExternalUser(external_User_LoginDTO.Username, external_User_LoginDTO.Password);
+            var data = _mapper.Map<External_UserDTO>(obj);
+            if (obj != null)
+            {
+                dataToken = BuildTokenFromExternalUser(data);
+            } 
+            if (obj == null)
+            {
+                webResponse = new Response<UserToken>()
+                {
+                    IsSuccess = false,
+                    Message = "The user is invalid",
+                    StatusCode = "Faild"
+                };
+                return Ok(webResponse);
+            }
+            webResponse = new Response<UserToken>()
+            {
+                IsSuccess = true,
+                Message = "The user is valid",
+                StatusCode = "OK",
+                Body = dataToken
+            };
+            return Ok(webResponse);
+           
+        }
+
+
+        [HttpPost, Route("RegisterExternalUser")]
+
+        public async Task<ActionResult> RegisterExternalUser( External_User_RegisterDTO external_User_RegisterDTO)
+        {
+            external_User_RegisterDTO.UserName = external_User_RegisterDTO.UserName.ToUpper();
+
+            var webResonse = new Response<External_UserDTO>();
+           
+            if (await _repo.ValitedExitenceUser(external_User_RegisterDTO.UserName))
+            {
+                var obj = _mapper.Map<External_UserDTO>(external_User_RegisterDTO);
+                webResonse = new Response<External_UserDTO>()
+                {
+                    IsSuccess = false,
+                    StatusCode = "Faild",
+                    Message = "The user alredy exist",
+                    Body = obj
+                };
+                return Ok(webResonse);
+            }
+            var NewUser = _mapper.Map<External_User>(external_User_RegisterDTO);
+            var UserCreated = await _repo.RegisterExternalUser(NewUser, external_User_RegisterDTO.Password);
+            var UserReturn = _mapper.Map<External_UserDTO>(UserCreated);
+            webResonse = new Response<External_UserDTO>()
+            {
+                IsSuccess = true, 
+                Message = "The user was created", 
+                StatusCode = "OK",
+                Body = UserReturn
+            };
+             return Ok(webResonse);
+        }
+
+
+
+
+
+
+
+
+
         //[HttpGet, Route("GetCurrentUser")]
         //public async Task<ActionResult<UserLoginDTO>> GetCurrentUser() 
         //{
@@ -123,6 +205,15 @@ namespace LogisticsCenterAPI.Controllers.Authetication
         //    return "Success";
         //}
 
+
+        //AUTHENTICATION EXTERNAL USERS
+
+
+
+
+
+
+         
         private UserToken BuildToken(User userInfo)
         {
             var claims = new[]
@@ -133,6 +224,37 @@ namespace LogisticsCenterAPI.Controllers.Authetication
                 new Claim("JobFunction", userInfo.JobFunction),
                 new Claim("FirstName", userInfo.FirstName),
                 new Claim("GroupAccess", userInfo.GroupAccess),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            // Tiempo de expiración del token. En nuestro caso lo hacemos de una hora.
+            var expiration = DateTime.UtcNow.AddDays(1);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+               issuer: null,
+               audience: null,
+               claims: claims,
+               expires: expiration,
+               signingCredentials: creds);
+
+            return new UserToken()
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = expiration
+            };
+        }
+
+        private UserToken BuildTokenFromExternalUser(External_UserDTO userInfo)
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.UserName),
+                new Claim(ClaimTypes.Name, userInfo.UserName),
+                new Claim("FirstName", userInfo.FirstName),
+                new Claim("LastName", userInfo.LastName),
+                new Claim("SupplierId", userInfo.SupplierId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));

@@ -20,7 +20,7 @@ namespace LogisticsCenterAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://localhost:8080/");
+                    //webBuilder.UseUrls("http://localhost:8080/");
                 });
     }
 }

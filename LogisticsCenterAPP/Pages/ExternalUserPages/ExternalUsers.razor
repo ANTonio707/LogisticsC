@@ -1,0 +1,40 @@
+﻿@page "/ExternalUsers"
+@using LogisticsCenterAPP.Services
+@inject IWebServices webServices
+
+<h1>Users</h1>
+@if (ListUsers == null)
+{
+    <label>No Found...</label>
+}
+else if(ListUsers.Capacity == 0)
+{
+  <label>Loadding...</label>
+}
+else
+{
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <td>UserName</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Supplier</td>
+        </tr>
+    </thead>
+    <tbody>
+       @foreach (var user in ListUsers)
+       {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.SupplierId</td>
+            </tr>
+       }
+    </tbody>
+</table>
+}
+@code {
+
+}

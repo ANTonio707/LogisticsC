@@ -46,10 +46,11 @@ namespace LogisticsCenterAPI.Controllers
             {
                 var WebResponse = new Response<Invoice>();
 
-                account.Supplier = accountDTO.Supplier;
+                account.SupplierId = accountDTO.SupplierId;
                 account.No_Invoice = accountDTO.No_Invoice;
-                account.Supplier = accountDTO.Supplier;
+                account.SupplierId = accountDTO.SupplierId;
                 account.ReceptionDate = accountDTO.ReceptionDate;
+                account.InvoiceSupplierDate = accountDTO.InvoiceSupplierDate;
                 account.PaymentDescription = accountDTO.PaymentDescription;
                 account.Reference = accountDTO.Reference;
                 account.InvoiceFileRute = accountDTO.InvoiceFileRute;
@@ -69,6 +70,43 @@ namespace LogisticsCenterAPI.Controllers
 
                 throw;
             }
+        }
+        [HttpPost,Route("Filter")]
+        public async Task<ActionResult> Filter([FromBody] GlobalSearchDTO globalSearchDTO)
+        {
+            var WebResponse = new Response<List<Account>>();
+            string GroupbillersAccess = _config.GetSection("GroupbillersAccess").Value;
+
+            var obj = await _accountRepository.Filter(globalSearchDTO);
+            //var claims = User.Claims.ToList();
+
+            WebResponse = new Response<List<Account>>()
+            {
+                StatusCode = "OK",
+                IsSuccess = true,
+                Message = "The search was successful",
+                Body = obj,
+                MetaData = obj.MetaData
+
+            };
+            return Ok(WebResponse);
+
+        }
+
+        [HttpPost, Route("GetById")]
+        public async Task<ActionResult> GetById(int Id) 
+        {
+            var WebResponse = new Response<Account>();
+
+            var obj = await _accountRepository.GetById(Id);
+            WebResponse = new Response<Account>()
+            {
+                StatusCode = "OK",
+                IsSuccess = true,
+                Body = obj
+            };
+            return Ok(WebResponse);
+            
         }
     }
 

@@ -11,9 +11,9 @@ namespace LogisticsCenterAPI.Repository.InvoiceRository
         public Task<InvoiceDTO> GetById(int Id);
         public Task<Invoice> Create(Invoice invoice);
         public Task<Invoice> Update(Invoice invoice);
-        public Invoice GetByNoinvoiceAndSuppler(string No_Invoice, string Supplier);
+        public Invoice GetByNoinvoiceAndSuppler(string No_Invoice, int SupplierId);
         public Task<bool> ValitedExistenceInvoice(Invoice invoice);
-        public Task<List<Invoice>> SearchByAllField(GlobalSearchDTO globalSearchDTO);
+        public Task<LogisticsCenterMODELS.Models.PagedList<Invoice>> SearchByAllField(GlobalSearchDTO globalSearchDTO);
         public Task<Invoice> Delete(int Id);
         public Task<Invoice> UpdateStatus(Invoice invoice);
     }

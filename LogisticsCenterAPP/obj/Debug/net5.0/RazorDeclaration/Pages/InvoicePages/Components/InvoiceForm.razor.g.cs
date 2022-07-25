@@ -137,6 +137,13 @@ using LogisticsCenterMODELS.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 4 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\InvoiceForm.razor"
+using Microsoft.AspNetCore.Authorization;
+
+#line default
+#line hidden
+#nullable disable
     public partial class InvoiceForm : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998

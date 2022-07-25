@@ -174,14 +174,25 @@ using System.IO;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 151 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\Invoices.razor"
+#line 231 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\Invoices.razor"
        
     string idAndClass = null;
     string ActiveClass = null;
     public InvoiceDTO i { get; set; } = new();
-    string FileBase64Src = "";
-    byte[] _fileBytes = null;
+    string FileBase64Src;
     IFileListEntry file = null;
+    /*-------------------------------------------*/
+    private int CurrentPage = 1;
+    private int TotalPages;
+    private string nombrePersonaFiltro = string.Empty;
+
+     private async Task selectedPage(int pagina)
+    {
+        CurrentPage = pagina;
+        await Search();
+    }
+    /*-------------------------------------------*/
+
 
     public async Task UpdateStatus() 
     {
@@ -191,7 +202,7 @@ using System.IO;
 
         Inv.InvoiceId = invoice.InvoiceId;
         Inv.No_Invoice = invoice.No_Invoice;
-        Inv.Supplier = invoice.Supplier;
+        Inv.SupplierId = invoice.SupplierId;
         Inv.PaymentDescription = invoice.PaymentDescription;
         Inv.Reference = invoice.Reference.Trim().ToUpper();
         Inv.InvoiceSupplierDate = Convert.ToDateTime(invoice.InvoiceSupplierDate);
@@ -218,6 +229,7 @@ using System.IO;
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IConfiguration _configuration { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IJSRuntime js { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigationManager { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private IWebServices WebServices { get; set; }

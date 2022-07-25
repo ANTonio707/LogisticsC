@@ -149,7 +149,7 @@ namespace LogisticsCenterAPI.Controllers
             Invoice Inv = new Invoice();
             //Inv.No_Invoice = invoiceDTO.No_Invoice;
             //Inv.Supplier = invoiceDTO.Supplier;
-            return _InvoiceRepository.GetByNoinvoiceAndSuppler(invoiceDTO.No_Invoice, invoiceDTO.Supplier);
+            return _InvoiceRepository.GetByNoinvoiceAndSuppler(invoiceDTO.No_Invoice, invoiceDTO.SupplierId);
         }
 
 
@@ -183,12 +183,15 @@ namespace LogisticsCenterAPI.Controllers
                     PageSize = 50,
                     PageNumber = 1
                 };  
+
+
                 var claims = User.Claims.ToList();
+
 
                 var UserTest = claims.Any(x => x.Type == "GroupAccess" && x.Value == GroupbillersAccess);
                 if (UserTest)
                 {
-                   var dataTest =  db.Invoice.Where(x => x.status == false);
+                    var dataTest =  db.Invoice.Where(x => x.status == false);
                     
                     var WebResponsetest = new Response<List<Invoice>>()
                     {
@@ -200,10 +203,23 @@ namespace LogisticsCenterAPI.Controllers
                     return Ok(WebResponsetest);
                 }
 
+                var ListSupplier = claims.Any(x => x.Type == "SupplierId" && x.Value == x.Value);
+                if (ListSupplier)
+                {
+                    var dataTest = db.Invoice.Where(x => x.SupplierId == Convert.ToInt32(claims[4].Value));
 
+                    var WebResponsetest = new Response<List<Invoice>>()
+                    {
+                        StatusCode = "OK",
+                        IsSuccess = true,
+                        Message = "List was returned",
+                        Body = dataTest.ToList()
+                    };
+                    return Ok(WebResponsetest);
+                }
+                
                 var data = await _InvoiceRepository.GetInvoices(pagination);
 
-                
                 var WebResponse = new Response<List<Invoice>>()
                 {
                     StatusCode = "OK",
@@ -227,16 +243,14 @@ namespace LogisticsCenterAPI.Controllers
             try
             {
                 var WebResponse = new Response<Invoice>();
-                if (utls.IsValidRecord(invoiceDTO.Supplier, invoiceDTO.No_Invoice))
+                if (utls.IsValidRecord(invoiceDTO.SupplierId, invoiceDTO.No_Invoice))
                 {
                     if (invoiceDTO.FileName != null)
                     {
-                        
-                        
                         if (invoiceDTO.FileName != null)
                         {
                             var PathFolderResourse = _config.GetSection("PathFolderResourse").Value;
-                            var fullPathFile = PathFolderResourse + $"{invoiceDTO.Supplier}/{DateTime.Now.ToString("yyyy")}/{DateTime.Now.ToString("MM")}";
+                            var fullPathFile = PathFolderResourse + $"{invoiceDTO.SupplierId}/{DateTime.Now.ToString("yyyy")}/{DateTime.Now.ToString("MM")}";
                             if (!Directory.Exists(fullPathFile))
                             {
                                 Directory.CreateDirectory(fullPathFile);
@@ -258,7 +272,7 @@ namespace LogisticsCenterAPI.Controllers
                         } 
                     }
                     Inv.No_Invoice = invoiceDTO.No_Invoice.Trim().ToUpper();
-                    Inv.Supplier = invoiceDTO.Supplier.Trim().ToUpper();
+                    Inv.SupplierId = invoiceDTO.SupplierId;
                     Inv.PaymentDescription = invoiceDTO.PaymentDescription.Trim().ToUpper();
                     Inv.Reference = invoiceDTO.Reference.Trim().ToUpper();
                     Inv.ReceptionDate = invoiceDTO.ReceptionDate;
@@ -308,7 +322,7 @@ namespace LogisticsCenterAPI.Controllers
                 if (invoiceDTO.FileName != null)
                 {
                     var PathFolderResourse = _config.GetSection("PathFolderResourse").Value;
-                    var fullPathFile = PathFolderResourse + $"{invoiceDTO.Supplier}/{DateTime.Now.ToString("yyyy")}/{DateTime.Now.ToString("MM")}";
+                    var fullPathFile = PathFolderResourse + $"{invoiceDTO.SupplierId}/{DateTime.Now.ToString("yyyy")}/{DateTime.Now.ToString("MM")}";
                     if (!Directory.Exists(fullPathFile))
                     {
                         Directory.CreateDirectory(fullPathFile);
@@ -331,7 +345,7 @@ namespace LogisticsCenterAPI.Controllers
 
                 Inv.InvoiceId = invoiceDTO.InvoiceId;
                 Inv.No_Invoice = invoiceDTO.No_Invoice.Trim().ToUpper();
-                Inv.Supplier = invoiceDTO.Supplier.Trim().ToUpper();
+                Inv.SupplierId = invoiceDTO.SupplierId;
                 Inv.PaymentDescription = invoiceDTO.PaymentDescription.Trim().ToUpper();
                 Inv.Reference = invoiceDTO.Reference.Trim().ToUpper();
                 Inv.InvoiceSupplierDate = Convert.ToDateTime(invoiceDTO.InvoiceSupplierDate);
@@ -364,8 +378,7 @@ namespace LogisticsCenterAPI.Controllers
         }
 
         [HttpPost, Route("ValitedExistenceInvoice")]
-
-        public async Task<ActionResult> ValitedExistenceInvoice(InvoiceDTO invoice) 
+        public async Task<ActionResult> ValitedExistenceInvoice(InvoiceValidDTO invoice) 
         {
             try
             {
@@ -373,7 +386,7 @@ namespace LogisticsCenterAPI.Controllers
 
                
 
-                inv.Supplier = invoice.Supplier;
+                inv.SupplierId = invoice.SupplierId;
                 inv.No_Invoice = invoice.No_Invoice;
                 var obj = await _InvoiceRepository.ValitedExistenceInvoice(inv);
                
@@ -417,19 +430,59 @@ namespace LogisticsCenterAPI.Controllers
         //    return Ok(WebResponse);
         //}
         [HttpPost, Route("Filter")]
-        public async Task<ActionResult> GetByAllField([FromBody] GlobalSearchDTO globalSearchDTO) 
+        public async Task<ActionResult> GetByAllField([FromBody] GlobalSearchDTO globalSearchDTO)
         {
-             
+            var WebResponse = new Response<List<Invoice>>();
+            string GroupbillersAccess = _config.GetSection("GroupbillersAccess").Value;
+
             var obj = await _InvoiceRepository.SearchByAllField(globalSearchDTO);
-            var WebResponse = new Response<List<Invoice>>()
+            //var claims = User.Claims.ToList();
+            
+            #region
+            //var UserTest = claims.Any(x => x.Type == "GroupAccess" && x.Value == GroupbillersAccess);
+            //if (UserTest)
+            //{
+            //    var data = obj.Where(x => x.status == false);
+
+            //    WebResponse = new Response<List<Invoice>>()
+            //    {
+            //        StatusCode = "OK",
+            //        IsSuccess = true,
+            //        Message = "The search was successful",
+            //        Body = data.ToList()
+            //    };
+            //    return Ok(WebResponse);
+            //}
+            //var ListSupplier = claims.Any(x => x.Type == "SupplierId" && x.Value == x.Value);
+            //if (ListSupplier)
+            //{
+            //    var data = obj.Where(x => x.SupplierId == Convert.ToInt32(claims[4].Value));
+
+            //    WebResponse = new Response<List<Invoice>>()
+            //    {
+            //        StatusCode = "OK",
+            //        IsSuccess = true,
+            //        Message = "The search was successful",
+            //        Body = data.ToList()
+            //    };
+            //    return Ok(WebResponse);
+            //}
+            #endregion
+
+            WebResponse = new Response<List<Invoice>>()
             {
                 StatusCode = "OK",
                 IsSuccess = true,
                 Message = "The search was successful",
-                Body = obj
+                Body = obj,
+                MetaData = obj.MetaData
+                
             };
             return Ok(WebResponse);
+
         }
+
+
         [HttpPost, Route("Delete")]
         public async Task<ActionResult> Delete([FromBody]int Id) 
         {
@@ -451,7 +504,7 @@ namespace LogisticsCenterAPI.Controllers
             Inv = invoiceDTO;
             Inv.InvoiceId = invoiceDTO.InvoiceId;
             Inv.No_Invoice = invoiceDTO.No_Invoice.Trim().ToUpper();
-            Inv.Supplier = invoiceDTO.Supplier.Trim().ToUpper();
+            Inv.SupplierId = invoiceDTO.SupplierId;
             Inv.PaymentDescription = invoiceDTO.PaymentDescription.Trim().ToUpper();
             Inv.Reference = invoiceDTO.Reference.Trim().ToUpper();
             Inv.InvoiceSupplierDate = Convert.ToDateTime(invoiceDTO.InvoiceSupplierDate);

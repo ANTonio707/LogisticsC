@@ -12,23 +12,34 @@ namespace LogisticsCenterAPP.Services
         Task<Response<InvoiceDTO>> GetInvoiceById(int id);
         Task<Response<InvoiceDTO>> GetInvoiceByIdWithImgUrl(int id);
         Task<Response<InvoiceDTO>> Update(InvoiceDTO invoiceDTO);
-        Task<Response<InvoiceDTO>> ValitedExistenceInvoice(InvoiceDTO invoiceDTO);
+        Task<Response<InvoiceValidDTO>> ValitedExistenceInvoice(InvoiceValidDTO invoiceDTO);
         Task<Response<List<Invoice>>> SearchByAllField(GlobalSearchDTO globalSearchDTO);
         Task<Response<InvoiceDTO>>Delete (int Id);
         Task<Response<InvoiceDTO>> UpdateStatus(InvoiceDTO invoiceDTO);
         
-
         //Account
-        Task<Response<AccountDTO>> Create(AccountDTO accountDTO);
+        Task<Response<AccountDTO>> CreateAccount(AccountDTO accountDTO);
+        Task<Response<List<Account>>> FilterAccount(GlobalSearchDTO GlobalSearchDTO);
 
-        //Login
 
-        Task<Response<UserToken>>LoginWithActiveDirectory(UserLoginDTO user);
+        //SUPPLIER
+        Task<Response<List<SupplierDTO>>> GetSuppliers();
+        Task<Response<SupplierDTO>> CreateSupplier(SupplierDTO supplierDTO);
+        Task<Response<SupplierDTO>> UpdateSupplier(SupplierDTO supplierDTO);
 
+        //EXTERNAL_USER
+        Task<Response<List<External_UserDTO>>> GetExternalUsers();
+
+        //AUTHENTICATION ACTIVE DIRECTORY USERS 
+        Task<Response<UserToken>> LoginWithActiveDirectory(UserLoginDTO user);
         Task<Response<UserLoginDTO>> GetCurrentUser();
         Task<Response<UserLoginDTO>> LogOut();
 
-        
+
+        //AUTHENTICATION EXTERNAL USERS 
+        Task<Response<UserToken>> LoginUserExternal(External_User_LoginDTO external_User_LoginDTO);
+        Task<Response<External_UserDTO>> RegisterExternalUser(External_User_RegisterDTO external_User_RegisterDTO);
+
     }
     public class WebServices : IWebServices
     {
@@ -63,9 +74,9 @@ namespace LogisticsCenterAPP.Services
         {
             return await _httpService.Put<Response<InvoiceDTO>>($"/api/Invoice/Update", invoiceDTO);
         }
-        public async Task<Response<InvoiceDTO>> ValitedExistenceInvoice(InvoiceDTO invoiceDTO) 
+        public async Task<Response<InvoiceValidDTO>> ValitedExistenceInvoice(InvoiceValidDTO invoiceDTO) 
         {
-            return await _httpService.Post<Response<InvoiceDTO>>($"/api/Invoice/ValitedExistenceInvoice", invoiceDTO);
+            return await _httpService.Post<Response<InvoiceValidDTO>>($"/api/Invoice/ValitedExistenceInvoice", invoiceDTO);
         }
         public async Task<Response<List<Invoice>>> SearchByAllField(GlobalSearchDTO globalSearchDTO)
         {
@@ -81,24 +92,62 @@ namespace LogisticsCenterAPP.Services
         } 
 
         //Account
-        public async Task<Response<AccountDTO>>Create(AccountDTO accountDTO)
+        public async Task<Response<AccountDTO>>CreateAccount(AccountDTO accountDTO)
         {
             return await _httpService.Post<Response<AccountDTO>>($"/api/Account/Create",accountDTO);
         }
+        public async Task<Response<List<Account>>> FilterAccount(GlobalSearchDTO globalSearchDTO) 
+        {
+            return await _httpService.Post<Response<List<Account>>>($"/api/Account/Filter", globalSearchDTO);
+        }
 
-        //Login
-        public async Task<Response<UserToken>>LoginWithActiveDirectory(UserLoginDTO user)
+
+        //SUPPLIER
+        public async Task<Response<List<SupplierDTO>>> GetSuppliers() 
+        {
+            return await _httpService.Get<Response<List<SupplierDTO>>>($"/api/Supplier/Get");
+        }
+        public async Task<Response<SupplierDTO>>CreateSupplier(SupplierDTO supplierDTO)
+        {
+            return await _httpService.Post<Response<SupplierDTO>>($"/api/Supplier/Create", supplierDTO);
+        }
+        public async Task<Response<SupplierDTO>> UpdateSupplier(SupplierDTO supplierDTO)
+        {
+            return await _httpService.Post<Response<SupplierDTO>>($"/api/Supplier/Update", supplierDTO);
+        }
+
+        //EXTERNAL_USER
+
+        public async Task<Response<List<External_UserDTO>>> GetExternalUsers() 
+        {
+            return await _httpService.Get<Response<List<External_UserDTO>>>("/api/ExternalUser/Get");
+        }
+
+
+        //AUTHENTICATION ACTIVE DIRECTORY USERS 
+        public async Task<Response<UserToken>> LoginWithActiveDirectory(UserLoginDTO user)
         {
             return await _httpService.Post<Response<UserToken>>($"/api/Auth/Login", user);
         }
-
-        public async Task<Response<UserLoginDTO>> GetCurrentUser() 
+        public async Task<Response<UserLoginDTO>> GetCurrentUser()
         {
             return await _httpService.Get<Response<UserLoginDTO>>($"/api/Auth/GetCurrentUser");
-        }   
-        public async Task<Response<UserLoginDTO>> LogOut() 
+        }
+        public async Task<Response<UserLoginDTO>> LogOut()
         {
             return await _httpService.Get<Response<UserLoginDTO>>($"/api/Auth/Logout");
         }
+
+        //AUTHENTICATION EXTERNAL USERS 
+
+        public async Task<Response<UserToken>> LoginUserExternal(External_User_LoginDTO external_User_LoginDTO) 
+        {
+            return await _httpService.Post<Response<UserToken>>($"/api/Auth/LoginUserExternal", external_User_LoginDTO);
+        }
+        public async Task<Response<External_UserDTO>> RegisterExternalUser(External_User_RegisterDTO external_User_RegisterDTO) 
+        {
+            return await _httpService.Post<Response<External_UserDTO>>($"/api/Auth/RegisterExternalUser", external_User_RegisterDTO);
+        }
+
     }
 }

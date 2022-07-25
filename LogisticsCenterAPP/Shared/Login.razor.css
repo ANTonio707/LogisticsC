@@ -1,0 +1,234 @@
+﻿/*body {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    font-family: sans-serif;
+}
+
+.contenedor {
+    backdrop-filter: blur(10px);*/ /*
+    background-image: linear-gradient(rgba(5,7,12,0.75), rgba(131, 131, 131, 0)), url("/img/MG_9804-min-2.jpg");*/
+    /*background-color: #1E1450;
+    display: flex;
+    right: 0;
+    height: 100%;
+    background-position: bottom bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container-componets {
+    background-color: transparent;*/
+    /*  background: linear-gradient(transparent, whitesmoke);*/
+    /*background: linear-gradient(transparent, #1E1450);
+    padding: 20px 15px;*/
+    /*margin:25px 40px 0 0;*/
+    /*border-radius: 10px;
+    position: absolute;
+    top: 10%;
+    right: 20%;
+    z-index: 2;
+}
+
+.marg-text {
+    margin-top: 20px
+}
+
+.comtainer-componets-logo {
+    text-align: center;
+}
+
+.container-componets-tittle {
+    text-align: center;
+    font-size: 50px;
+}
+
+.container-componets-txtBoxs {
+    width: 90%;
+}
+
+.container-componets-label {
+    font-size: 25px;
+    padding-left: 10px;
+}
+
+.btndiv {
+    align-items: center;
+}
+
+.input-text {
+    height: 50px;
+    width: 100%;
+}
+
+.test {
+    height: 400px;
+    width: 400px;
+    backdrop-filter: blur(5px);
+    background-color: rgba(225, 225, 255, .5);
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    border-radius: 15rem;
+}*/
+
+/* cover */
+/*.cover {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    z-index: 99;
+    background: rgba(0,0,0,.5);
+    display: grid;
+    place-items: center;
+}
+
+.card {
+    width: 20%;
+    height: 15%;
+}*/
+/*--------------------------------------------------------------------------*/
+/*-----------------------------Loadding-------------------------------------*/
+/*--------------------------------------------------------------------------*/
+
+/* From uiverse.io by @Z-C-Code */
+/*@keyframes square-animation {
+    0% {
+        left: 0;
+        top: 0;
+    }
+
+    10.5% {
+        left: 0;
+        top: 0;
+    }
+
+    12.5% {
+        left: 32px;
+        top: 0;
+    }
+
+    23% {
+        left: 32px;
+        top: 0;
+    }
+
+    25% {
+        left: 64px;
+        top: 0;
+    }
+
+    35.5% {
+        left: 64px;
+        top: 0;
+    }
+
+    37.5% {
+        left: 64px;
+        top: 32px;
+    }
+
+    48% {
+        left: 64px;
+        top: 32px;
+    }
+
+    50% {
+        left: 32px;
+        top: 32px;
+    }
+
+    60.5% {
+        left: 32px;
+        top: 32px;
+    }
+
+    62.5% {
+        left: 32px;
+        top: 64px;
+    }
+
+    73% {
+        left: 32px;
+        top: 64px;
+    }
+
+    75% {
+        left: 0;
+        top: 64px;
+    }
+
+    85.5% {
+        left: 0;
+        top: 64px;
+    }
+
+    87.5% {
+        left: 0;
+        top: 32px;
+    }
+
+    98% {
+        left: 0;
+        top: 32px;
+    }
+
+    100% {
+        left: 0;
+        top: 0;
+    }
+}
+
+.loader {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    transform: rotate(45deg);
+}
+
+.loader-square {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    margin: 2px;
+    border-radius: 0px;
+    background: Red;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    animation: square-animation 10s ease-in-out infinite both;
+}
+
+    .loader-square:nth-of-type(0) {
+        animation-delay: 0s;
+    }
+
+    .loader-square:nth-of-type(1) {
+        animation-delay: -1.4285714286s;
+    }
+
+    .loader-square:nth-of-type(2) {
+        animation-delay: -2.8571428571s;
+    }
+
+    .loader-square:nth-of-type(3) {
+        animation-delay: -4.2857142857s;
+    }
+
+    .loader-square:nth-of-type(4) {
+        animation-delay: -5.7142857143s;
+    }
+
+    .loader-square:nth-of-type(5) {
+        animation-delay: -7.1428571429s;
+    }
+
+    .loader-square:nth-of-type(6) {
+        animation-delay: -8.5714285714s;
+    }
+
+    .loader-square:nth-of-type(7) {
+        animation-delay: -10s;
+    }*/

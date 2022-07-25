@@ -167,13 +167,20 @@ using System.Text;
 #nullable disable
 #nullable restore
 #line 10 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\Index.razor"
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 11 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\Index.razor"
+using Microsoft.IdentityModel.Tokens;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 12 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\Index.razor"
 using System.IdentityModel.Tokens.Jwt;
 
 #line default
@@ -195,50 +202,27 @@ using System.IdentityModel.Tokens.Jwt;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 59 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\Index.razor"
+#line 64 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\Index.razor"
  
-    [CascadingParameter]
-    private Task<AuthenticationState> authentication { get; set; }
-
-    string username = "";
-    string groupAccess;
-    protected override async Task OnInitializedAsync()
-    {
-        await test();
-
-    }
-    public async Task test()
-    {
-        var obj = await authentication;
-        var user = obj.User;
-        groupAccess = utls.GetGroup().ToString();
-        //var stream =await sessionStorage.GetFromSessionStorage("TOKENKEY");  
-        //var handler = new JwtSecurityTokenHandler();
-        //var jsonToken = handler.ReadToken(stream);
-        //var tokenS = jsonToken as JwtSecurityToken;
-        if (user.Identity.IsAuthenticated)
-        {
-            username = user.Identity.Name;
-        }
-        else
-        {
-            username = "Is not authenticate";
-        }
-    }
-
+ 
     public void ReturnAddInvoice()
-    {
+    { 
+
         navigation.NavigateTo("/SubmitInvoice");
     }
     public void RedirectListInvoice()
     {
         navigation.NavigateTo("/Invoices");
     }
- 
+    public void RedirectListAccounts()
+    {
+        navigation.NavigateTo("/Accounts");
+    }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IConfiguration _configuration { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private Utls utls { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private ISessionStorageServices sessionStorage { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigation { get; set; }

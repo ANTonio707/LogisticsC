@@ -1,0 +1,75 @@
+﻿@page "/"
+@layout LayoutEmpty
+@using LogisticsCenterAPP.Auth
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models.DTOModels
+@inject AuthenticationStateProvider _authProvider
+@inject NavigationManager navigartion
+@inject IToastService toastService
+<link href="/css/Login.css" rel="stylesheet" />
+   
+    <body>
+        <div class="contenedor"> 
+            @if (@activeLoadding == true)
+            {
+                <div class="loader">
+                    <div class="loader-square"></div>
+                    <div class="loader-square"></div>
+                    <div class="loader-square"></div>
+                    <div class="loader-square"></div>
+                    <div class="loader-square"></div>
+                    <div class="loader-square"></div>
+                    <div class="loader-square"></div>
+                </div>
+            }
+            <div class="container-componets">
+                <div class="comtainer-componets-logo">
+                    <img style="width: 350px;" src="/img/logo.png" alt="">
+                </div>
+                <div class="container-componets-tittle">
+                    <label class="form-label fs-3">Logistics Center</label>
+                </div>
+                <div class="container-componets-tb">
+                   <div class="container-componets-txtBoxs">    
+                        <div class="marg-text container-componets-username">
+                            <label class="container-componets-label">Username</label>
+                            <div>
+                                <input @bind-value="user.UserName" class="input-text form-control" placeholder="Username..." type="text" id="input-name">
+                            </div>
+                        </div>
+                        <div class="marg-text container-componets-password">
+                            <label class="container-componets-label">Password</label>
+                            <div>
+                                <input @bind-value="user.Password" class="input-text form-control" placeholder="Password..." type="password" id="input-password">
+                            </div>
+                        </div>
+                   </div>
+                    <div class="marg-text btndiv">
+                        <button @onclick="GetUserActiveDirectory" type="submit"  class="btnSubmit btn btn-secondary" style="font-size: 20px;">Log in</button>
+                    </div>
+                    <div class="marg-text container-componets-rememberme">   
+                        <input type="checkbox" name="">
+                        <span>Remember me?</span>
+                    </div>
+                </div>
+            
+            </div>
+    </div>
+    </body>
+ 
+@code {
+    //private UserLoginDTO user; 
+     
+    //private async Task LoginUser()
+    //{
+
+    //    ResponseLogin = await webServices.LoginWithActiveDirectory(user);
+    //    //await ((AuthStateProvider)_authProvider).LoginWithActiveDirectory(user); 
+    //    navigartion.NavigateTo("/index");
+    //    //return await Task.FromResult(true);
+
+    //}
+
+ 
+}
+    

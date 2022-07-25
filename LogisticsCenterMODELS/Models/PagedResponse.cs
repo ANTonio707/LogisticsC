@@ -16,6 +16,7 @@ namespace LogisticsCenterMODELS.Models
         public int TotalRecords { get; set; }
         public Uri NextPage { get; set; }
         public Uri PreviousPage { get; set; }
+
         public PagedResponse(T data, int pageNumber, int pageSize, int TotalRecords)
         {
             this.TotalRecords = TotalRecords;

@@ -1,0 +1,57 @@
+﻿@page "/ExternalLogin"
+@layout LayoutEmpty
+ 
+@inject AuthenticationStateProvider _authProvider
+@inject NavigationManager navigartion
+@inject IToastService toastService
+
+    <div class="contenedor"> 
+        <div class="container-componets">
+            <div class="comtainer-componets-logo">
+                <img style="width: 350px;" src="/img/logo.png" alt="">
+            </div>
+            <div class="container-componets-tittle">
+                <label class="form-label fs-3">Logistics Center</label>
+            </div>
+            <div class="container-componets-tb">
+               <div class="container-componets-txtBoxs">    
+                    <div class="marg-text container-componets-username">
+                        <label class="container-componets-label">Username</label>
+                        <div>
+                            <input @bind-value="external_User_LoginDTO.Username" class="input-text form-control" placeholder="Username..." type="text" id="input-name">
+                        </div>
+                    </div>
+                    <div class="marg-text container-componets-password">
+                        <label class="container-componets-label">Password</label>
+                        <div>
+                            <input @bind-value="external_User_LoginDTO.Password" class="input-text form-control" placeholder="Password..." type="password" id="input-password">
+                        </div>
+                    </div>
+               </div>
+                <div class="marg-text btndiv">
+                    <button @onclick="GetUser" type="submit"  class="btnSubmit btn btn-secondary" style="font-size: 20px;">Log in</button>
+                </div>
+                <div class="marg-text container-componets-rememberme">   
+                    <input type="checkbox" name="">
+                    <span>Remember me?</span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+ 
+@code {
+    //private UserLoginDTO user; 
+     
+    //private async Task LoginUser()
+    //{
+
+    //    ResponseLogin = await webServices.LoginWithActiveDirectory(user);
+    //    //await ((AuthStateProvider)_authProvider).LoginWithActiveDirectory(user); 
+    //    navigartion.NavigateTo("/index");
+    //    //return await Task.FromResult(true);
+
+    //}
+
+ 
+}

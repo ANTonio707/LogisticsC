@@ -7,27 +7,29 @@
 @using  System.Security
 @using System.Security.Claims
 @using System.Text
+@using Microsoft.Extensions.Configuration
 @using Microsoft.IdentityModel.Tokens
 @using System.IdentityModel.Tokens.Jwt
 @inject ISessionStorageServices sessionStorage 
 @inject Utls utls
-
+@inject IConfiguration _configuration
 
 
     <AuthorizeView >
         <Authorized >
-          <h6>you are logged, @username</h6>
+         @* <h6>you are logged, @username</h6>*@
         </Authorized>
 
         <NotAuthorized>
-           <h6> you are not logged, @username</h6> 
+           @*<h6> you are not logged, @username</h6> *@
         </NotAuthorized>
     </AuthorizeView>
  
      <div class="container">
-           @if (@groupAccess != "CAU Finance Import")
-            {
-                 <div @onclick="ReturnAddInvoice" class="carddd"> 
+           
+         @if (AdministrationrAccess == true || SupplierAccess == true)
+         {
+                <div @onclick="ReturnAddInvoice" class="carddd"> 
                 <div class="text">
                      <b>Add Invoice</b>
                 </div>
@@ -35,7 +37,8 @@
                     <i style="font-size:100px" class="fa-solid fa-file-invoice"></i>
                 </span>
             </div>
-            }
+         }
+
         <div @onclick="RedirectListInvoice" class="carddd"> 
             <div class="text">
                  <b>List Invoice</b>
@@ -44,7 +47,9 @@
                 <i  style="font-size:100px" class="fa-solid fa-list-check"></i>
             </span>
         </div>
-        <div class="carddd"> 
+       @if (AdministrationrAccess == true)
+       {
+        <div @onclick="RedirectListAccounts" class="carddd"> 
             <div class="text">
                  <b>Accounts</b>
             </div>
@@ -52,47 +57,23 @@
                 <i style="font-size:100px" class="fa-solid fa-list-ol"></i>
             </span>
         </div>
-
+       }
      </div>
 
 @code
 {
-    [CascadingParameter]
-    private Task<AuthenticationState> authentication { get; set; }
-
-    string username = "";
-    string groupAccess;
-    protected override async Task OnInitializedAsync()
-    {
-        await test();
-
-    }
-    public async Task test()
-    {
-        var obj = await authentication;
-        var user = obj.User;
-        groupAccess = utls.GetGroup().ToString();
-        //var stream =await sessionStorage.GetFromSessionStorage("TOKENKEY");  
-        //var handler = new JwtSecurityTokenHandler();
-        //var jsonToken = handler.ReadToken(stream);
-        //var tokenS = jsonToken as JwtSecurityToken;
-        if (user.Identity.IsAuthenticated)
-        {
-            username = user.Identity.Name;
-        }
-        else
-        {
-            username = "Is not authenticate";
-        }
-    }
-
+ 
     public void ReturnAddInvoice()
-    {
+    { 
+
         navigation.NavigateTo("/SubmitInvoice");
     }
     public void RedirectListInvoice()
     {
         navigation.NavigateTo("/Invoices");
     }
- 
+    public void RedirectListAccounts()
+    {
+        navigation.NavigateTo("/Accounts");
+    }
 }

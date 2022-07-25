@@ -113,8 +113,6 @@ namespace LogisticsCenterAPP.Auth
             }
 
             claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
-            var dd =  claims.Where(x => x.Type == "GroupAccess").FirstOrDefault();
-            var tt = dd.Value;
             return claims;
         }
 

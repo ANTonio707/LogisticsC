@@ -16,66 +16,70 @@ namespace LogisticsCenterAPI.Repository.AuthRepository
             _dbContext = applicationDbContext;
             this._config = configuration;
         }
-        //public async Task<User> Login(string Username, string password)
-        //{
-        //    var user = await _dbContext.user.FirstOrDefaultAsync(x => x.Username == Username);
-        //    if (user == null)
-        //    {
-        //        return null;
-        //    }
-        //    if (!VerifyPasswordHash(Username, user.PasswordHash, user.PasswordSalt))
-        //    {
-        //        return null;
-        //    }
-        //    return user;
-        //}
-        //public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        //{
-        //    using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
-        //    {
-        //        var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        //        for (int i = 0; i < computedHash.Length; i++)
-        //        {
-        //            if (computedHash[i] != passwordHash[i])
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
-        //public async Task<User> Register(User user, string password)
-        //{
-        //    byte[] passwordHash;
-        //    byte[] passworldSalt;
+        public async Task<External_User> LoginExternalUser(string Username, string password)
+        {
+            var user = await _dbContext.External_User.FirstOrDefaultAsync(x => x.UserName == Username);
+            if (user == null)
+            {
+                return null;
+            }
+            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            {
+                return null;
+            }
+            return user;
+        }
 
-        //    CreatePasswordHash(password, out passwordHash, out passworldSalt);
-        //    user.PasswordHash = passwordHash;
-        //    user.PasswordSalt = passworldSalt;
+        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != passwordHash[i])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
 
-        //    await _dbContext.user.AddAsync(user);
-        //    await _dbContext.SaveChangesAsync();
+        public async Task<External_User> RegisterExternalUser(External_User user, string password)
+        {
+            byte[] passwordHash;
+            byte[] passworldSalt;
 
-        //    return user;
-        //}
+            CreatePasswordHash(password, out passwordHash, out passworldSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passworldSalt;
 
-        //private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) 
-        //{
-        //    using (var hmac = new System.Security.Cryptography.HMACSHA512()) 
-        //    {
-        //        passwordSalt = hmac.Key;
-        //        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        //    }
-        //}
-        //public async Task<bool> ValitedExitenceUser(string UserName)
-        //{
-        //    if (await _dbContext.user.AnyAsync(x => x.Username == UserName))
-        //        return true;
-            
-        //    return false;
-        //}
+            await _dbContext.External_User.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
 
-        /*--------------------------------------------------------------*/
+            return user;
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+        public async Task<bool> ValitedExitenceUser(string UserName)
+        {
+            if (await _dbContext.External_User.AnyAsync(x => x.UserName == UserName))
+                return true;
+
+            return false;
+        }
+
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------ACTIVE--DIRECTORY------------------------------------------------------------------------------------*/
+        /*-------------------------------------------------------------------------------------------------------------------------------------------------------*/
         public async Task<User> LoginWithActDirect(string UserName, string Password)
         {
             string LDAP_Connection = _config.GetSection("LDAP_Connection").Value;
@@ -99,22 +103,22 @@ namespace LogisticsCenterAPI.Repository.AuthRepository
                     if (isVaildGroupAdministration != null || isValidGroupbillersAccess != null)
                     {
                         string group = " ";
-                    if (isVaildGroupAdministration != null)
-                        group = isVaildGroupAdministration.GroupName;
-                    else
-                        group = isValidGroupbillersAccess.GroupName;
+                        if (isVaildGroupAdministration != null)
+                            group = isVaildGroupAdministration.GroupName;
+                        else
+                            group = isValidGroupbillersAccess.GroupName;
                         
-                    user = new User()
-                        {
-                            Username = UserName,
-                            FullName = userActD.FullName,
-                            FirstName = userActD.FirstName,
-                            JobFunction = userActD.JobFunction,
-                            GroupAccess = group
-                    };
-                        return user;
-                    }
-                    return user = null;
+                            user = new User()
+                            {
+                                    Username = UserName,
+                                    FullName = userActD.FullName,
+                                    FirstName = userActD.FirstName,
+                                    JobFunction = userActD.JobFunction,
+                                    GroupAccess = group
+                            };
+                                return user;
+                        }
+                     return user = null;
                 }
             return user = null;
         }

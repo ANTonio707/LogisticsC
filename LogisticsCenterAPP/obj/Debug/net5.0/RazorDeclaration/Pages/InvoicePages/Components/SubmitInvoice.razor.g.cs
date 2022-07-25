@@ -137,6 +137,20 @@ using LogisticsCenterMODELS.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 6 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\SubmitInvoice.razor"
+using Microsoft.AspNetCore.Authorization;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 13 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\SubmitInvoice.razor"
+           [Authorize]
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/SubmitInvoice")]
     public partial class SubmitInvoice : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -146,7 +160,7 @@ using LogisticsCenterMODELS.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 30 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\SubmitInvoice.razor"
+#line 31 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\Pages\InvoicePages\Components\SubmitInvoice.razor"
        
 
     string Message = "No file(s) selected";
@@ -154,25 +168,7 @@ using LogisticsCenterMODELS.Models;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        await test();
-    }
-    public async Task test()
-    {
-
-        var authState = await authenticationState;
-        var usuario = authState.User;
-        if (usuario.Identity.IsAuthenticated)
-        {
-            Console.WriteLine(usuario.Identity.Name);
-            Console.WriteLine(usuario.Identity.Name);
-        }
-        else
-        {
-              Console.WriteLine("Not Authorize");
-        }
-    }
+  
 
 #line default
 #line hidden

@@ -12,12 +12,14 @@ namespace LogisticsCenterMODELS.Models
     {
         [Key]
         public int InvoiceId { get; set; }
+
         [Required]
-        public string Supplier { get; set; }
+        public int SupplierId { get; set; }
+        public virtual Supplier Supplier { get; set; }
         [Required]
         public DateTime? InvoiceSupplierDate { get; set; }
         [Required]
-        public DateTime ReceptionDate { get; set; }
+        public DateTime? ReceptionDate { get; set; }
         [Required]
         public string No_Invoice { get; set; }
         [Required]

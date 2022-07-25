@@ -42,7 +42,7 @@ namespace LogisticsCenterAPI
         public string FileConvert(InvoiceDTO invoiceDTO, string PathFolder) 
         {
             string[] i = invoiceDTO.FileName.Split('.');
-            var path = $"{PathFolder}/{invoiceDTO.No_Invoice}-{invoiceDTO.Supplier}-{DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss:ffff")}.{i[1]}";
+            var path = $"{PathFolder}/{invoiceDTO.No_Invoice}-{invoiceDTO.SupplierId}-{DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss:ffff")}.{i[1]}";
             var fs = System.IO.File.Create(path);
             fs.Write(invoiceDTO.FileContent, 0,
             invoiceDTO.FileContent.Length);
@@ -50,9 +50,9 @@ namespace LogisticsCenterAPI
 
             return path;
         }
-        public bool IsValidRecord(string supplier, string No_invoice) 
+        public bool IsValidRecord(int supplierId, string No_invoice) 
         {
-            if (db.Invoice.FirstOrDefault(c => c.Supplier == supplier && c.No_Invoice == No_invoice) == null)
+            if (db.Invoice.FirstOrDefault(c => c.SupplierId == supplierId && c.No_Invoice == No_invoice) == null)
             {
                 return true;
             }  

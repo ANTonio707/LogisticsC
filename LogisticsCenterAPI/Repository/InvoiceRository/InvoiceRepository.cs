@@ -2,6 +2,7 @@
 using LogisticsCenterAPI.Data;
 using LogisticsCenterAPI.Models.Pagination;
 using LogisticsCenterMODELS.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace LogisticsCenterAPI.Repository.InvoiceRository
         public async Task<Invoice> Create(Invoice invoice)
         {
                 var obj = await _dbContext.Invoice.AddAsync(invoice);
-                _dbContext.SaveChanges();
+                 await _dbContext.SaveChangesAsync();
                 return obj.Entity;
         }
         public async Task<Invoice> Update (Invoice invoice) 
@@ -74,11 +75,11 @@ namespace LogisticsCenterAPI.Repository.InvoiceRository
                 throw ex;
             }
         }
-        public Invoice GetByNoinvoiceAndSuppler(string No_Invoice, string Supplier)
+        public Invoice GetByNoinvoiceAndSuppler(string No_Invoice, int SupplierId)
         {
             try
             {    
-              var obj =  _dbContext.Invoice.Where(f => f.No_Invoice == No_Invoice && f.Supplier == Supplier).FirstOrDefault();
+              var obj =  _dbContext.Invoice.Where(f => f.No_Invoice == No_Invoice && f.SupplierId == SupplierId).FirstOrDefault();
                 return obj;
             }
             catch (Exception ex)
@@ -90,54 +91,87 @@ namespace LogisticsCenterAPI.Repository.InvoiceRository
 
         public async Task<bool> ValitedExistenceInvoice(Invoice invoice)
         {
-                var obj = await Task.FromResult(_dbContext.Invoice.FirstOrDefault(f => f.No_Invoice == invoice.No_Invoice && f.Supplier == invoice.Supplier));
+            var obj = await Task.FromResult(_dbContext.Invoice.FirstOrDefault(f => f.No_Invoice == invoice.No_Invoice && f.SupplierId == invoice.SupplierId));
+            if (invoice.No_Invoice.Length >  1)
+            {
                 if (obj != null)
                 {
                     return true;
                 }
                 return false;
+            }
+            return true;
         }
         public async Task<List<Invoice>> SearchByAllField(string invoiceField)
         {
-            var obj = await Task.FromResult(_dbContext.Invoice.Where(s => s.No_Invoice == invoiceField || s.Supplier == invoiceField || s.PaymentDescription == invoiceField || s.Reference == invoiceField).ToList());
+            var obj = await Task.FromResult(_dbContext.Invoice.Where(s => s.No_Invoice == invoiceField || s.SupplierId == Convert.ToInt32(invoiceField) || s.PaymentDescription == invoiceField || s.Reference == invoiceField).ToList());
             return obj;
         }
-        public async Task<List<Invoice>> SearchByAllField(GlobalSearchDTO globalSearchDTO)
+        public async Task<LogisticsCenterMODELS.Models.PagedList<Invoice>> SearchByAllField(GlobalSearchDTO globalSearchDTO)
         {
-            List<Invoice> LstInvoices = new List<Invoice>();
-            var SentList = new List<Invoice>();
-            LstInvoices = _dbContext.Invoice.ToList();
+
+            try
+            {
+                var ValidFilter = new PaginationFilter(globalSearchDTO.PageNumber, globalSearchDTO.PageSize);
+
+                var supp = await _dbContext.Supplier.ToListAsync();
+                var FilteredData = _dbContext.Invoice.Where(x => (globalSearchDTO.No_Invoice == null || x.No_Invoice.Contains(globalSearchDTO.No_Invoice))
+                && (globalSearchDTO.Supplier == null || x.Supplier.Name.Contains(globalSearchDTO.Supplier))
+                && (globalSearchDTO.PaymentDescription == null || x.PaymentDescription.Contains(globalSearchDTO.PaymentDescription))
+                && (globalSearchDTO.Reference == null || x.Reference.Contains(globalSearchDTO.Reference))
+                && (globalSearchDTO.ReceptionDateFrom == null || (x.ReceptionDate > globalSearchDTO.ReceptionDateFrom && x.InvoiceSupplierDate < globalSearchDTO.ReceptionDateTo))
+                && (globalSearchDTO.SupplierInvoiceDateFrom == null || (x.InvoiceSupplierDate > globalSearchDTO.SupplierInvoiceDateFrom && x.InvoiceSupplierDate < globalSearchDTO.SupplierInvoiceDateTo))
+                ).ToList();
+                var pagedData = FilteredData
+               .Skip((globalSearchDTO.PageNumber - 1) * globalSearchDTO.PageSize)
+                  .Take(globalSearchDTO.PageSize)
+                  .ToList();
+                var totalRecords = FilteredData.Count();
+                var dataa = new LogisticsCenterMODELS.Models.PagedList<Invoice>(pagedData, totalRecords, globalSearchDTO.PageNumber, globalSearchDTO.PageSize);
+                var test = dataa.MetaData;
+                return dataa;
+            }
+            catch (Exception ex )
+            {
+
+                throw ex;
+            }
+            #region
+            //List<Invoice> LstInvoices = new List<Invoice>();
+            //var SentList = new List<Invoice>();
+            //LstInvoices = _dbContext.Invoice.ToList();
 
 
-            if (globalSearchDTO.No_Invoice != null )
-            {
-                var no_invoice = globalSearchDTO.No_Invoice.Trim().ToUpper();
-                LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.No_Invoice == no_invoice).ToList());
-            }
-            if (globalSearchDTO.Supplier != null)
-            {
-                var supplier = globalSearchDTO.Supplier.Trim().ToUpper();
-                LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.Supplier == supplier).ToList());
-            }
-            if (globalSearchDTO.Reference != null )
-            {
-                var reference = globalSearchDTO.Reference.Trim().ToUpper();
-                LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.Reference == reference).ToList());
-            }
-            if (globalSearchDTO.PaymentDescription != null)
-            {
-                var paymentDescription = globalSearchDTO.PaymentDescription.Trim().ToUpper();
-                LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.PaymentDescription == paymentDescription).ToList());
-            }
-            if (globalSearchDTO.DateFrom != null)
-            {
-                LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.InvoiceSupplierDate >= globalSearchDTO.DateFrom).ToList());
-            }
-            if (globalSearchDTO.DateTo != null)
-            {
-                LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.InvoiceSupplierDate <= globalSearchDTO.DateTo).ToList());
-            }
-            return LstInvoices;
+            //if (globalSearchDTO.No_Invoice != null )
+            //{
+            //    var no_invoice = globalSearchDTO.No_Invoice.Trim().ToUpper();
+            //    LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.No_Invoice.Contains(no_invoice)).ToList());
+            //}
+            //if (globalSearchDTO.SupplierId != 0)
+            //{
+            //    var supplier = globalSearchDTO.SupplierId;
+            //    LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.SupplierId == supplier).ToList());
+            //}
+            //if (globalSearchDTO.Reference != null )
+            //{
+            //    var reference = globalSearchDTO.Reference.Trim().ToUpper();
+            //    LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.Reference.Contains(reference)).ToList());
+            //}
+            //if (globalSearchDTO.PaymentDescription != null)
+            //{
+            //    var paymentDescription = globalSearchDTO.PaymentDescription.Trim().ToUpper();
+            //    LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.PaymentDescription.Contains(paymentDescription)).ToList());
+            //}
+            //if (globalSearchDTO.DateFrom != null)
+            //{
+            //    LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.InvoiceSupplierDate >= globalSearchDTO.DateFrom).ToList());
+            //}
+            //if (globalSearchDTO.DateTo != null)
+            //{
+            //    LstInvoices = await Task.FromResult(LstInvoices.Where(s => s.InvoiceSupplierDate <= globalSearchDTO.DateTo).ToList());
+            //}
+            //return LstInvoices;
+            #endregion
         }
 
         public async Task<Invoice> Delete(int Id) {

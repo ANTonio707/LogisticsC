@@ -1,0 +1,307 @@
+﻿@page "/Accounts"
+@using BlazorInputFile
+@using LogisticsCenterAPP.Services
+@using LogisticsCenterMODELS.Models
+@using Microsoft.AspNetCore.Authorization
+@using  Microsoft.Extensions.Configuration
+@using System.IO
+@inject Microsoft.Extensions.Configuration.IConfiguration config
+@inject IWebServices WebServices
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+@attribute [Authorize]
+@inject IConfiguration _configuration 
+
+
+<div class=" FilterTable">
+    <div class="FiltersComp">
+        <div class="container-componets">
+            <div class="container-componets-title">
+              <label >Reception Date</label>
+            </div>
+            <div class="container-componets-separator"></div>
+            <div  class="container-componets-div group-form">
+                <label class="form-label">From</label>
+                <div>
+                    <input class="form-control form-control-sm" type="date" name="start" @bind-value="globalSearchDTO.ReceptionDateFrom"/>
+                </div>
+            </div>
+            <div style="display: inline-block" class="group-form">
+                <label class="form-label">To</label>
+                <div>
+                    <input class="form-control form-control-sm" type="date" name="End" @bind-value="globalSearchDTO.ReceptionDateTo"/>
+                </div>
+            </div>
+        </div>
+         <div class="container-componets">
+            <div class="container-componets-title">
+              <label>Supplier invoice date</label>
+            </div>
+            <div class="container-componets-separator"></div>
+            <div  class="container-componets-div group-form">
+                <label class="form-label">From</label>
+                <div>
+                    <input class="form-control form-control-sm" type="date" name="start" @bind-value="globalSearchDTO.SupplierInvoiceDateFrom"/>
+                </div>
+            </div>
+            <div style="display: inline-block" class="group-form">
+                <label class="form-label">To</label>
+                <div>
+                    <input class="form-control form-control-sm" type="date" name="End" @bind-value="globalSearchDTO.SupplierInvoiceDateTo"/>
+                </div>
+            </div>
+        </div>
+        <div class="container-componets">
+            <div class="container-componets-title">
+              <label></label>
+            </div>
+            <div class="container-componets-separator-trst"></div>
+            <div class="container-componets-div group-form">
+                <label class="form-label">No. Invoice</label>
+                <div>
+                    <input   class="form-control form-control-sm" type="text" name="Invoice" placeholder="No Invoice..."  @bind-value="globalSearchDTO.No_Invoice" style="text-transform:uppercase;" />
+                </div>
+            </div> 
+        </div>
+       <div class="container-componets">
+            <div class="container-componets-title">
+              <label></label>
+            </div>
+            <div class="container-componets-separator-trst"></div>
+            <div class="container-componets-div group-form">
+                <label class="form-label">Supplier</label>
+                <div>
+                    <input class="form-control form-control-sm" type="text" name="PaymentDescription" placeholder="Supplier..."  @bind-value="globalSearchDTO.Supplier" style="text-transform:uppercase"/>
+                </div>
+            </div> 
+        </div>
+ 
+        <div class="container-componets">
+            <div class="container-componets-title">
+              <label></label>
+            </div>
+            <div class="container-componets-separator-trst"></div>
+            <div class="container-componets-div group-form">
+                <label class="form-label">No. FRP</label>
+                <div>
+                    <input class="form-control form-control-sm" type="Text" name="Reference" placeholder="No. FRP..." @bind-value="globalSearchDTO.No_FRP" style="text-transform:uppercase"/>
+                </div>
+            </div> 
+        </div>
+        <div class="container-componets">
+            <div class="container-componets-title">
+              <label></label>
+            </div>
+            <div class="container-componets-separator-trst"></div>
+            <div class="container-componets-div group-form">
+                <label class="form-label">No. Internal Invoice</label>
+                <div>
+                    <input class="form-control form-control-sm" type="Text" name="Reference" placeholder="No. Internal Invoice..." @bind-value="globalSearchDTO.No_Internal_Invoice" style="text-transform:uppercase"/>
+                </div>
+            </div> 
+        </div>
+
+        <div class="container-componets">
+            <div class="container-componets-title">
+              <label></label>
+            </div>
+            <div class="container-componets-separator-trst"></div>
+            <div class="container-componets-div group-form">
+                <label class="form-label">Status</label>
+                <div>
+                   <div>
+                 <select class="form-control form-control-sm">
+                     <option>Select...</option>
+                     <option>option 2</option>
+                     <option>option 3</option>
+                     <option>option 4</option>
+                 </select>
+             </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <div class="btnFilters">
+        <input class="btn btn-success" type="submit" name="Search" value="Search" @onclick="Filter"/>
+        <input class="btn btn-danger" type="submit" name="Clear" value="Clear" @onclick="Clear"/>
+
+    </div>
+</div>
+
+@if (ListAccounts == null)
+{
+    <label>No Found....</label>
+}
+ <div class="container-fluid">
+        <table align="center" cellpadding="1" class="table table-bordered table-hover table-sm" style=" width:3000px; padding:0;">
+        <thead class="tableHead" >
+            <tr > 
+                <td>No. FRP</td>   
+                <td>Supplier</td>  
+                <td>Reception Date</td>
+                <td>Invoice Supplier Date</td>
+                <td>Reception Date vs  Invoice Supplier Date</td>
+                <td>No. Invoice</td>
+                <td>No. Internal Invoice</td>
+                <td>Payment  Description</td>
+                <td>Reference</td>
+                <td>Customer</td>
+                <td>Cantidad</td>
+                <td>Cost Rate</td>
+                <td>Ingreso</td>
+                <td>Cantidad</td>
+                <td>Entrance Fee</td>
+                <td>Utilidad TT</td>
+                <td></td>
+
+            </tr>
+        </thead>
+        @if (ListAccounts != null)
+        {   
+            <tbody class="TableBody">
+                @foreach (var account in ListAccounts)
+                {
+                    <tr>
+                        <td>@account.No_FRP</td> 
+                        <td>@account.Supplier.Name</td>
+                        <td>@account.ReceptionDate.Value.ToShortDateString()</td>
+                        <td>@account.InvoiceSupplierDate.Value.ToShortDateString()</td>
+                        <td>
+                                    @{
+                                      TimeSpan date =  Convert.ToDateTime(@account.InvoiceSupplierDate).Subtract(Convert.ToDateTime(@account.ReceptionDate));
+                                    }
+                                    @date.Days
+                        </td>
+                        <td>@account.No_Invoice</td>
+                        <td>@account.No_Internal_Invoice</td>
+                        <td>@account.PaymentDescription</td>
+                        <td>@account.Reference</td>
+                        <td>@account.CustomerName</td>
+                        <td>@account.CustomerPayment</td>
+                        <td>@account.CostRate</td>
+                        <td>@{
+                                int test = Convert.ToInt32(@account.CustomerPayment * @account.CostRate);  
+                             }
+                            @test
+                        </td>
+                        <td>@account.SupplierPayment</td>
+                        <td>@account.EntranceFee</td>
+                        <td>@test</td>
+                       <td>
+                           <BSButton style="text-decoration: none; font-size:30px"   Target="modal1"><i class="fa-solid fa-eye"></i></BSButton>
+                       </td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+ </div>
+@if(ListAccounts.Capacity == 0)
+{
+@*  <div class="container">
+       <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+  </div>*@
+}
+ <Pagination TotalPages ="TotalPages" CurrentPage="CurrentPage"  Radio="2"
+            selectedPage="selectedPage"/>
+
+<BSModal Class="bg-success" DataId="modal1">
+    <Header><h1>Invoice Details</h1></Header>
+    <Content>
+          <div class="detailsInvoice">  
+@*             <EditForm Model="accountDTO" OnSubmit="Submit">
+            <div class="row col-md-6" style="margin: 0 auto">
+                 <div class=" col-md-12" style="text-align:center">
+                    <h1 style="margin: 0 auto">Invoice</h1>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>No. Invoice</label>
+                    <div>
+                        <input @bind-value="invoice.No_Invoice" class="form-control" disabled/>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Supplier</label>
+                    <div>
+                        <input @bind-value="invoice.SupplierId" class="form-control" disabled/>
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>No. RFP</label>
+                    <div>
+                        <input @bind-value="accountDTO.No_FRP" type="text" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-5 form-group">
+                    <label>No. Internal  Invoice</label>
+                    <div>
+                        <input @bind-value="accountDTO.No_Internal_Invoice" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>customer payment</label>
+                    <div>
+                        <input @bind-value="accountDTO.CustomerPayment" class="form-control" type="text" />
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Customer</label>
+                    <div>
+                        <input @bind-value="accountDTO.CustomerName" type="text" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Entrance Fee</label>
+                    <div>
+                        <input @bind-value="accountDTO.EntranceFee" type="text" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>Supplier payment</label>
+                    <div>
+                        <input @bind-value="accountDTO.SupplierPayment" type="text" class="form-control"/>
+                    </div>
+                </div> 
+                <div class="col-md-3">
+                    <label>Cost Rate</label>
+                    <div>
+                        <input @bind-value="accountDTO.CostRate" class="form-control" type="text"/>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </div>
+</EditForm>*@
+          </div>      
+    </Content>
+    <Footer Context="modal">
+
+        <BSButton MarginStart="Margins.Auto" Color="BSColor.Secondary" @onclick="modal.HideAsync">Close</BSButton>
+    </Footer>
+</BSModal>
+
+
+@code {
+ 
+    public InvoiceDTO i { get; set; } = new();
+    public DateTime CalDate; 
+    /*-------------------------------------------*/
+    private int CurrentPage = 1;
+    private int TotalPages;
+    private string nombrePersonaFiltro = string.Empty;
+
+     private async Task selectedPage(int pagina)
+    {   CurrentPage = 1;
+        CurrentPage = pagina;
+        await LoadData();
+    }
+    /*-------------------------------------------*/
+}

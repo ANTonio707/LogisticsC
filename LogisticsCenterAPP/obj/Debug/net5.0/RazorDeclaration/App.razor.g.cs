@@ -123,6 +123,13 @@ using Microsoft.AspNetCore.Components;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 1 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\App.razor"
+using System.Security.Claims;
+
+#line default
+#line hidden
+#nullable disable
     public partial class App : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -130,6 +137,43 @@ using Microsoft.AspNetCore.Components;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 21 "C:\Users\D5113\source\repos\LogisticsCenter\LogisticsCenterAPP\App.razor"
+       
+
+    //[CascadingParameter]
+    //private Task<AuthenticationState> authentication { get; set; }
+
+    //public bool ValidAuth { get; set; } = false;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (!user.Identity.IsAuthenticated)
+        {
+            _navigationManager.NavigateTo("/", false);
+        }
+
+
+    }
+    //public async Task Valid()
+    //{
+    //    var obj = await authentication;
+    //    if (!obj.User.Identity.IsAuthenticated)
+    //    {
+    //        ValidAuth = true;
+    //    }
+    //    else
+    //    {
+    //        ValidAuth = false;
+    //    }
+    //}
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager _navigationManager { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private AuthenticationStateProvider _authenticationStateProvider { get; set; }
     }
 }
 #pragma warning restore 1591

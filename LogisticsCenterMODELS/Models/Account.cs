@@ -11,8 +11,9 @@ namespace LogisticsCenterMODELS.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Supplier { get; set; }
-        public DateTime ReceptionDate { get; set; }
+        public int SupplierId { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public DateTime? ReceptionDate { get; set; }
         public DateTime? InvoiceSupplierDate { get; set; }
         public string No_Invoice { get; set; }
         public string PaymentDescription { get; set; }
